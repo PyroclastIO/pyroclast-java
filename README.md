@@ -18,6 +18,20 @@ PyroclastTopicClient client = new PyroclastTopicClient()
     .withTopicId("yyyyyyyyy")
     .buildClient();
 
+Map<Object, Object> event = new HashMap<>();
+event.put("name", "mike");
+
+client.produceEvent(event);
+```
+
+### Send a batch of events synchronously
+
+```java
+PyroclastTopicClient client = new PyroclastTopicClient()
+    .withWriteApiKey("xxxxxxxxx")
+    .withTopicId("yyyyyyyyy")
+    .buildClient();
+
 Map<Object, Object> e1 = new HashMap<>();
 e1.put("name", "mike");
 
@@ -27,12 +41,9 @@ e2.put("name", "ron");
 List<Map<Object, Object>> events = new ArrayList<>();
 events.add(e1);
 events.add(e2);
+
 client.produceEvents(events);
 ```
-
-### Send a batch of events synchronously
-
-Coming soon.
 
 ### Send one event asynchronously
 
