@@ -1,6 +1,6 @@
-package io.pyroclast.pyroclastjava.v1.topic;
+package io.pyroclast.pyroclastjava.v1.topic.deserializers;
 
-import io.pyroclast.pyroclastjava.v1.topic.responses.ProduceEventResponse;
+import io.pyroclast.pyroclastjava.v1.topic.TopicRecord;
 import java.io.IOException;
 import java.util.Map;
 import org.codehaus.jackson.JsonNode;
@@ -10,7 +10,7 @@ import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.deser.std.StdDeserializer;
 
-class TopicRecordDeserializer extends StdDeserializer<TopicRecord> {
+public class TopicRecordDeserializer extends StdDeserializer<TopicRecord> {
     
    public TopicRecordDeserializer() {
         this(null);

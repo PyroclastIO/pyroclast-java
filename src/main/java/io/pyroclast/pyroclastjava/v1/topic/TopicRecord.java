@@ -1,5 +1,6 @@
 package io.pyroclast.pyroclastjava.v1.topic;
 
+import io.pyroclast.pyroclastjava.v1.topic.deserializers.TopicRecordDeserializer;
 import java.util.Map;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 

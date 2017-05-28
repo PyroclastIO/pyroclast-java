@@ -32,7 +32,7 @@ public class AsyncCallback implements FutureCallback<HttpResponse> {
     public void completed(HttpResponse t) {
         try {
             onSuccess.invoke(responseParser.parseResponse(t, mapper));
-        } catch (IOException ex) {
+        } catch (Throwable ex) {
             Logger.getLogger(PyroclastTopicClient.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {

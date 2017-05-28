@@ -1,6 +1,10 @@
 package io.pyroclast.pyroclastjava.v1.topic.parsers;
 
-import io.pyroclast.pyroclastjava.v1.topic.responses.BulkProduceEventResponse;
+import io.pyroclast.pyroclastjava.v1.exceptions.MalformedEventException;
+import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
+import io.pyroclast.pyroclastjava.v1.exceptions.UnauthorizedAccessException;
+import io.pyroclast.pyroclastjava.v1.exceptions.UnknownAPIException;
+import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventsResult;
 import java.io.IOException;
 import java.io.StringWriter;
 import org.apache.commons.io.IOUtils;
@@ -8,10 +12,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class BulkProduceEventsParser implements ResponseParser<BulkProduceEventResponse> {
+public class BulkProduceEventsParser implements ResponseParser<ProducedEventsResult> {
 
     @Override
-    public BulkProduceEventResponse parseResponse(HttpResponse response, ObjectMapper mapper) throws IOException {
+    public ProducedEventsResult parseResponse(HttpResponse response, ObjectMapper mapper) throws IOException, PyroclastAPIException {
         int status = response.getStatusLine().getStatusCode();
 
         switch (status) {
@@ -21,15 +25,15 @@ public class BulkProduceEventsParser implements ResponseParser<BulkProduceEventR
                 IOUtils.copy(entity.getContent(), writer, "UTF-8");
                 String json = writer.toString();
 
-                return mapper.readValue(json, BulkProduceEventResponse.class);
+                return mapper.readValue(json, ProducedEventsResult.class);
             case 400:
-                return new BulkProduceEventResponse("Event data was malformed.");
+                throw new MalformedEventException();
 
             case 401:
-                return new BulkProduceEventResponse("API key unauthorized to perform this action.");
+                throw new UnauthorizedAccessException();
 
             default:
-                return new BulkProduceEventResponse(response.getStatusLine().toString());
+                throw new UnknownAPIException(response.getStatusLine().toString());
         }
     }
 

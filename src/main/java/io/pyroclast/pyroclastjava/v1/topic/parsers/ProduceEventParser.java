@@ -1,6 +1,10 @@
 package io.pyroclast.pyroclastjava.v1.topic.parsers;
 
-import io.pyroclast.pyroclastjava.v1.topic.responses.ProduceEventResponse;
+import io.pyroclast.pyroclastjava.v1.exceptions.MalformedEventException;
+import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
+import io.pyroclast.pyroclastjava.v1.exceptions.UnauthorizedAccessException;
+import io.pyroclast.pyroclastjava.v1.exceptions.UnknownAPIException;
+import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventResult;
 import java.io.IOException;
 import java.io.StringWriter;
 import org.apache.commons.io.IOUtils;
@@ -8,10 +12,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class ProduceEventParser implements ResponseParser<ProduceEventResponse> {
+public class ProduceEventParser implements ResponseParser<ProducedEventResult> {
 
     @Override
-    public ProduceEventResponse parseResponse(HttpResponse response, ObjectMapper mapper) throws IOException {
+    public ProducedEventResult parseResponse(HttpResponse response, ObjectMapper mapper) throws IOException, PyroclastAPIException {
         int status = response.getStatusLine().getStatusCode();
 
         switch (status) {
@@ -21,15 +25,15 @@ public class ProduceEventParser implements ResponseParser<ProduceEventResponse> 
                 IOUtils.copy(entity.getContent(), writer, "UTF-8");
                 String json = writer.toString();
 
-                return mapper.readValue(json, ProduceEventResponse.class);
+                return mapper.readValue(json, ProducedEventResult.class);
             case 400:
-                return new ProduceEventResponse(false, "Event data was malformed.");
+                throw new MalformedEventException();
 
             case 401:
-                return new ProduceEventResponse(false, "API key unauthorized to perform this action.");
+                throw new UnauthorizedAccessException();
 
             default:
-                return new ProduceEventResponse(false, response.getStatusLine().toString());
+                throw new UnknownAPIException(response.getStatusLine().toString());
         }
     }
 

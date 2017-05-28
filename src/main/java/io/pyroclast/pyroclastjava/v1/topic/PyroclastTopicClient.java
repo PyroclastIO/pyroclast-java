@@ -1,8 +1,9 @@
 package io.pyroclast.pyroclastjava.v1.topic;
 
+import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.PollTopicParser;
-import io.pyroclast.pyroclastjava.v1.topic.responses.BulkProduceEventResponse;
-import io.pyroclast.pyroclastjava.v1.topic.responses.ProduceEventResponse;
+import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventsResult;
+import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventResult;
 import io.pyroclast.pyroclastjava.v1.topic.async.AsyncSuccessCallback;
 import io.pyroclast.pyroclastjava.v1.topic.async.AsyncFailCallback;
 import io.pyroclast.pyroclastjava.v1.topic.async.AsyncCancelledCallback;
@@ -11,11 +12,9 @@ import io.pyroclast.pyroclastjava.v1.topic.parsers.BulkProduceEventsParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.ProduceEventParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.SubscribeToTopicParser;
-import io.pyroclast.pyroclastjava.v1.topic.responses.PollTopicResponse;
-import io.pyroclast.pyroclastjava.v1.topic.responses.SubscribeToTopicResponse;
+import io.pyroclast.pyroclastjava.v1.topic.responses.PollTopicResult;
+import io.pyroclast.pyroclastjava.v1.topic.responses.SubscribeToTopicResult;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +125,7 @@ public class PyroclastTopicClient {
         }
     }
 
-    public ProduceEventResponse produceEvent(Map<Object, Object> event) throws IOException {
+    public ProducedEventResult produceEvent(Map<Object, Object> event) throws IOException, PyroclastAPIException {
         ensureBaseAttributes();
         ensureWriteApiKey();
 
@@ -144,15 +143,15 @@ public class PyroclastTopicClient {
             CloseableHttpResponse response;
 
             response = httpClient.execute(httpPost);
-            ResponseParser<ProduceEventResponse> parser = new ProduceEventParser();
-            ProduceEventResponse tr = parser.parseResponse(response, MAPPER);
+            ResponseParser<ProducedEventResult> parser = new ProduceEventParser();
+            ProducedEventResult result = parser.parseResponse(response, MAPPER);
             response.close();
 
-            return tr;
+            return result;
         }
     }
 
-    public BulkProduceEventResponse produceEvents(List<Map<Object, Object>> events) throws IOException {
+    public ProducedEventsResult produceEvents(List<Map<Object, Object>> events) throws IOException, PyroclastAPIException {
         ensureBaseAttributes();
         ensureWriteApiKey();
 
@@ -171,15 +170,15 @@ public class PyroclastTopicClient {
             CloseableHttpResponse response;
 
             response = httpClient.execute(httpPost);
-            ResponseParser<BulkProduceEventResponse> parser = new BulkProduceEventsParser();
-            BulkProduceEventResponse tbr = parser.parseResponse(response, MAPPER);
+            ResponseParser<ProducedEventsResult> parser = new BulkProduceEventsParser();
+            ProducedEventsResult tbr = parser.parseResponse(response, MAPPER);
             response.close();
 
             return tbr;
         }
     }
 
-    public void produceEventAsync(Map<Object, Object> event, AsyncSuccessCallback<ProduceEventResponse> onSuccess, AsyncFailCallback onFail, AsyncCancelledCallback onCancel) throws IOException {
+    public void produceEventAsync(Map<Object, Object> event, AsyncSuccessCallback<ProducedEventResult> onSuccess, AsyncFailCallback onFail, AsyncCancelledCallback onCancel) throws IOException {
         ensureBaseAttributes();
         ensureWriteApiKey();
 
@@ -196,12 +195,12 @@ public class PyroclastTopicClient {
         HttpEntity entity = new ByteArrayEntity(jsonString.getBytes());
         httpPost.setEntity(entity);
 
-        ResponseParser<ProduceEventResponse> parser = new ProduceEventParser();
+        ResponseParser<ProducedEventResult> parser = new ProduceEventParser();
         AsyncCallback cb = new AsyncCallback(httpClient, parser, MAPPER, onSuccess, onFail, onCancel);
         httpClient.execute(httpPost, cb);
     }
 
-    public void produceEventsAsync(List<Map<Object, Object>> events, AsyncSuccessCallback<BulkProduceEventResponse> onSuccess, AsyncFailCallback onFail, AsyncCancelledCallback onCancel) throws IOException, InterruptedException {
+    public void produceEventsAsync(List<Map<Object, Object>> events, AsyncSuccessCallback<ProducedEventsResult> onSuccess, AsyncFailCallback onFail, AsyncCancelledCallback onCancel) throws IOException, InterruptedException {
         ensureBaseAttributes();
         ensureWriteApiKey();
 
@@ -219,12 +218,12 @@ public class PyroclastTopicClient {
         HttpEntity entity = new ByteArrayEntity(jsonString.getBytes());
         httpPost.setEntity(entity);
 
-        ResponseParser<BulkProduceEventResponse> parser = new BulkProduceEventsParser();
+        ResponseParser<ProducedEventsResult> parser = new BulkProduceEventsParser();
         AsyncCallback cb = new AsyncCallback(httpClient, parser, MAPPER, onSuccess, onFail, onCancel);
         httpClient.execute(httpPost, cb);
     }
 
-    public SubscribeToTopicResponse subscribeToTopic(String subscriptionName) throws IOException {
+    public PyroclastConsumer subscribeToTopic(String subscriptionName) throws IOException, PyroclastAPIException {
         ensureBaseAttributes();
         ensureReadApiKey();
 
@@ -236,28 +235,8 @@ public class PyroclastTopicClient {
             httpPost.addHeader("Content-type", this.format);
             
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-                ResponseParser<SubscribeToTopicResponse> parser = new SubscribeToTopicParser();
-                SubscribeToTopicResponse str = parser.parseResponse(response, MAPPER);
-                return str;
-            }
-        }
-    }
-    
-    public PollTopicResponse pollTopic(String subscriptionName) throws IOException {
-        ensureBaseAttributes();
-        ensureReadApiKey();
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            String url = String.format("%s/%s/poll/%s",
-                    this.buildEndpoint(), this.topicId, subscriptionName);
-            HttpPost httpPost = new HttpPost(url);
-            httpPost.addHeader("Authorization", this.readApiKey);
-            httpPost.addHeader("Content-type", this.format);
-            
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-                ResponseParser<PollTopicResponse> parser = new PollTopicParser();
-                PollTopicResponse ptr = parser.parseResponse(response, MAPPER);
-                return ptr;
+                ResponseParser<PyroclastConsumer> parser = new SubscribeToTopicParser(this.topicId, this.readApiKey, this.format, this.endpoint, subscriptionName);
+                return parser.parseResponse(response, MAPPER);
             }
         }
     }
