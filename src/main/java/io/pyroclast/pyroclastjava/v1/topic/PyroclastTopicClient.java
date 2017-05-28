@@ -1,5 +1,6 @@
 package io.pyroclast.pyroclastjava.v1.topic;
 
+import io.pyroclast.pyroclastjava.v1.topic.parsers.PollTopicParser;
 import io.pyroclast.pyroclastjava.v1.topic.responses.BulkProduceEventResponse;
 import io.pyroclast.pyroclastjava.v1.topic.responses.ProduceEventResponse;
 import io.pyroclast.pyroclastjava.v1.topic.async.AsyncSuccessCallback;
@@ -9,9 +10,13 @@ import io.pyroclast.pyroclastjava.v1.topic.async.AsyncCallback;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.BulkProduceEventsParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.ProduceEventParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.ResponseParser;
+import io.pyroclast.pyroclastjava.v1.topic.parsers.SubscribeToTopicParser;
+import io.pyroclast.pyroclastjava.v1.topic.responses.PollTopicResponse;
+import io.pyroclast.pyroclastjava.v1.topic.responses.SubscribeToTopicResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.http.HttpEntity;
@@ -31,6 +36,7 @@ public class PyroclastTopicClient {
     private static final ObjectMapper MAPPER;
 
     private String topicId;
+    private String readApiKey;
     private String writeApiKey;
     private String endpoint;
     private String region;
@@ -51,6 +57,11 @@ public class PyroclastTopicClient {
 
     public PyroclastTopicClient withTopicId(String topicId) {
         this.topicId = topicId;
+        return this;
+    }
+
+    public PyroclastTopicClient withReadApiKey(String readApiKey) {
+        this.readApiKey = readApiKey;
         return this;
     }
 
@@ -79,12 +90,30 @@ public class PyroclastTopicClient {
             throw new IllegalArgumentException("Topic ID must be configured.");
         }
 
-        if (this.writeApiKey == null) {
-            throw new IllegalArgumentException("Write API Key must be configured.");
+        if ((this.readApiKey == null) && (this.writeApiKey == null)) {
+            throw new IllegalArgumentException("Read or Write API Key must be configured.");
         }
 
         this.validated = true;
         return this;
+    }
+
+    private void ensureBaseAttributes() {
+        if (!this.validated) {
+            throw new IllegalArgumentException("Must call buildClient before executing API methods on this object.");
+        }
+    }
+
+    public void ensureReadApiKey() {
+        if (this.readApiKey == null) {
+            throw new IllegalArgumentException("Must configure client with a Read API Key to use this method.");
+        }
+    }
+
+    public void ensureWriteApiKey() {
+        if (this.writeApiKey == null) {
+            throw new IllegalArgumentException("Must configure client with a Write API Key to use this method.");
+        }
     }
 
     private String buildEndpoint() {
@@ -98,9 +127,8 @@ public class PyroclastTopicClient {
     }
 
     public ProduceEventResponse produceEvent(Map<Object, Object> event) throws IOException {
-        if (!this.validated) {
-            throw new IllegalArgumentException("Must call buildClient before executing methods.");
-        }
+        ensureBaseAttributes();
+        ensureWriteApiKey();
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = String.format("%s/%s/produce",
@@ -125,9 +153,8 @@ public class PyroclastTopicClient {
     }
 
     public BulkProduceEventResponse produceEvents(List<Map<Object, Object>> events) throws IOException {
-        if (!this.validated) {
-            throw new IllegalArgumentException("Must call buildClient before executing methods.");
-        }
+        ensureBaseAttributes();
+        ensureWriteApiKey();
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = String.format("%s/%s/bulk-produce",
@@ -153,9 +180,8 @@ public class PyroclastTopicClient {
     }
 
     public void produceEventAsync(Map<Object, Object> event, AsyncSuccessCallback<ProduceEventResponse> onSuccess, AsyncFailCallback onFail, AsyncCancelledCallback onCancel) throws IOException {
-        if (!this.validated) {
-            throw new IllegalArgumentException("Must call buildClient before executing methods.");
-        }
+        ensureBaseAttributes();
+        ensureWriteApiKey();
 
         CloseableHttpAsyncClient httpClient = HttpAsyncClients.createDefault();
         httpClient.start();
@@ -176,9 +202,8 @@ public class PyroclastTopicClient {
     }
 
     public void produceEventsAsync(List<Map<Object, Object>> events, AsyncSuccessCallback<BulkProduceEventResponse> onSuccess, AsyncFailCallback onFail, AsyncCancelledCallback onCancel) throws IOException, InterruptedException {
-        if (!this.validated) {
-            throw new IllegalArgumentException("Must call buildClient before executing methods.");
-        }
+        ensureBaseAttributes();
+        ensureWriteApiKey();
 
         CloseableHttpAsyncClient httpClient = HttpAsyncClients.createDefault();
         httpClient.start();
@@ -197,6 +222,44 @@ public class PyroclastTopicClient {
         ResponseParser<BulkProduceEventResponse> parser = new BulkProduceEventsParser();
         AsyncCallback cb = new AsyncCallback(httpClient, parser, MAPPER, onSuccess, onFail, onCancel);
         httpClient.execute(httpPost, cb);
+    }
+
+    public SubscribeToTopicResponse subscribeToTopic(String subscriptionName) throws IOException {
+        ensureBaseAttributes();
+        ensureReadApiKey();
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            String url = String.format("%s/%s/subscribe/%s",
+                    this.buildEndpoint(), this.topicId, subscriptionName);
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.addHeader("Authorization", this.readApiKey);
+            httpPost.addHeader("Content-type", this.format);
+            
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                ResponseParser<SubscribeToTopicResponse> parser = new SubscribeToTopicParser();
+                SubscribeToTopicResponse str = parser.parseResponse(response, MAPPER);
+                return str;
+            }
+        }
+    }
+    
+    public PollTopicResponse pollTopic(String subscriptionName) throws IOException {
+        ensureBaseAttributes();
+        ensureReadApiKey();
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            String url = String.format("%s/%s/poll/%s",
+                    this.buildEndpoint(), this.topicId, subscriptionName);
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.addHeader("Authorization", this.readApiKey);
+            httpPost.addHeader("Content-type", this.format);
+            
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                ResponseParser<PollTopicResponse> parser = new PollTopicParser();
+                PollTopicResponse ptr = parser.parseResponse(response, MAPPER);
+                return ptr;
+            }
+        }
     }
 
 }

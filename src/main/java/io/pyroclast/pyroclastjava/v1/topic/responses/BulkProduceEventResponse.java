@@ -1,6 +1,5 @@
 package io.pyroclast.pyroclastjava.v1.topic.responses;
 
-import io.pyroclast.pyroclastjava.v1.topic.responses.ProduceEventResponse;
 import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 

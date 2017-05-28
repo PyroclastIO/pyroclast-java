@@ -7,28 +7,30 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.deser.std.StdDeserializer;
 
+public class SubscribeToTopicResponseDeserializer extends StdDeserializer<SubscribeToTopicResponse> {
 
-public class ProduceEventResponseDeserializer extends StdDeserializer<ProduceEventResponse> {
-    
-    public ProduceEventResponseDeserializer() {
+    public SubscribeToTopicResponseDeserializer() {
         this(null);
     }
-    
-    public ProduceEventResponseDeserializer(Class<?> vc) {
+
+    public SubscribeToTopicResponseDeserializer(Class<?> vc) {
         super(vc);
     }
-    
+
     @Override
-    public ProduceEventResponse deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
+    public SubscribeToTopicResponse deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
-        boolean created = node.get("created").asBoolean();
-       
+        boolean success = false;
         String reason = null;
+        
+        if (node.has("subscribed")) {
+            success = node.get("subscribed").asBoolean();
+        }
+        
         if (node.has("reason")) {
             reason = node.get("reason").asText();
         }
-        
-        return new ProduceEventResponse(created, reason);
+
+        return new SubscribeToTopicResponse(success, reason);
     }
-    
 }
