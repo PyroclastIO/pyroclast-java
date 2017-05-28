@@ -1,33 +1,29 @@
-package io.pyroclast.pyroclastjava.v1.topic;
+package io.pyroclast.pyroclastjava.v1.topic.responses;
 
-import java.io.IOException;
-import java.util.Arrays;
+import io.pyroclast.pyroclastjava.v1.topic.responses.ProduceEventResponse;
 import java.util.List;
-import org.codehaus.jackson.JsonNode;
-
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
-@JsonDeserialize(using = TopicBulkResponseDeserializer.class)
-public class TopicBulkResponse  {
+@JsonDeserialize(using = BulkProduceEventsResponseDeserializer.class)
+public class BulkProduceEventResponse  {
     
-    public final List<TopicResponse> responses;
+    public final List<ProduceEventResponse> responses;
     public final boolean success;
     public final String reason;
     
-    public TopicBulkResponse(List<TopicResponse> responses) {
+    public BulkProduceEventResponse(List<ProduceEventResponse> responses) {
         this.responses = responses;
         this.success = true;
         reason = null;
     }
     
-    public TopicBulkResponse(String reason) {
+    public BulkProduceEventResponse(String reason) {
         this.responses = null;
         this.success = false;
         this.reason = reason;
     }
     
-    public List<TopicResponse> getResponses() {
+    public List<ProduceEventResponse> getResponses() {
         return this.responses;
     }
     

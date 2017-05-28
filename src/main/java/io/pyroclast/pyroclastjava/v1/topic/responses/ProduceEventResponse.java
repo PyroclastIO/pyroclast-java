@@ -1,18 +1,19 @@
-package io.pyroclast.pyroclastjava.v1.topic;
+package io.pyroclast.pyroclastjava.v1.topic.responses;
 
-import java.lang.reflect.Type;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
-public class TopicResponse {
+@JsonDeserialize(using = ProduceEventResponseDeserializer.class)
+public class ProduceEventResponse {
     
     public final boolean created;
     public final String reason;
     
-    public TopicResponse(boolean created) {
+    public ProduceEventResponse(boolean created) {
         this.created = created;
         this.reason = null;
     }
     
-    public TopicResponse(boolean created, String reason) {
+    public ProduceEventResponse(boolean created, String reason) {
         this.created = created;
         this.reason = reason;
     }
