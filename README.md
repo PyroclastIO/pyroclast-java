@@ -138,7 +138,7 @@ consumer.commit();
 
 ### Read service aggregations
 
-Instaniate a client.
+Instantiate a client.
 
 ```java
 import io.pyroclast.pyroclastjava.v1.service.PyroclastServiceClient;
