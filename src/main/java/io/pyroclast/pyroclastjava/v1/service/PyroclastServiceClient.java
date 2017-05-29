@@ -102,17 +102,15 @@ public class PyroclastServiceClient {
             
             return result;
         }
-
     }
 
     public void readAggregate(String aggregateName) {
-        ensureBaseAttributes();
+        throw new UnsupportedOperationException();
 
     }
 
     public void readAggregateGroup(String aggregateGroup) {
-        ensureBaseAttributes();
-
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -134,6 +134,37 @@ while (it.hasNext()) {
 consumer.commit();
 ```
 
+## Service APIs
+
+### Read service aggregations
+
+Instaniate a client.
+
+```java
+import io.pyroclast.pyroclastjava.v1.service.PyroclastServiceClient;
+
+PyroclastServiceClient client = new PyroclastServiceClient()
+        .withServiceId("xxxxxxxxxx")
+        .withReadApiKey("yyyyyyyyyy")
+        .buildClient();
+```
+
+#### Get all aggregates for a service
+
+```java
+import io.pyroclast.pyroclastjava.v1.service.ServiceAggregates;
+
+ServiceAggregates aggregates = client.readAggregates().getAggregates();
+```
+
+#### Get an aggregate by name for a service
+
+Coming soon.
+
+#### Get a single aggregate group by name
+
+Coming soon.
+
 ## License
 
 (The MIT License)
