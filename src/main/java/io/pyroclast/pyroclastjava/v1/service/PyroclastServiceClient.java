@@ -3,6 +3,10 @@ package io.pyroclast.pyroclastjava.v1.service;
 import io.pyroclast.pyroclastjava.v1.service.parsers.ReadAggregatesParser;
 import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
+import io.pyroclast.pyroclastjava.v1.service.parsers.ReadAggregateGroupParser;
+import io.pyroclast.pyroclastjava.v1.service.parsers.ReadAggregateParser;
+import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateGroupResult;
+import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateResult;
 import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregatesResult;
 import java.io.IOException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -74,7 +78,7 @@ public class PyroclastServiceClient {
             throw new IllegalArgumentException("Must call buildClient before executing API methods on this object.");
         }
     }
-        
+
     private String buildEndpoint() {
         if (this.endpoint != null) {
             return String.format("%s/%s/services", this.endpoint, VERSION);
@@ -99,18 +103,49 @@ public class PyroclastServiceClient {
                 ResponseParser<ReadAggregatesResult> parser = new ReadAggregatesParser();
                 result = parser.parseResponse(response, MAPPER);
             }
-            
+
             return result;
         }
     }
 
-    public void readAggregate(String aggregateName) {
-        throw new UnsupportedOperationException();
+    public ReadAggregateResult readAggregate(String aggregateName) throws IOException, PyroclastAPIException {
+        ensureBaseAttributes();
 
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            String url = String.format("%s/%s/aggregates/%s",
+                    this.buildEndpoint(), this.serviceId, aggregateName);
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.addHeader("Authorization", this.readApiKey);
+            httpGet.addHeader("Content-type", FORMAT);
+
+            ReadAggregateResult result;
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                ResponseParser<ReadAggregateResult> parser = new ReadAggregateParser();
+                result = parser.parseResponse(response, MAPPER);
+            }
+
+            return result;
+        }
     }
 
-    public void readAggregateGroup(String aggregateGroup) {
-        throw new UnsupportedOperationException();
+    public ReadAggregateGroupResult readAggregateGroup(String aggregateName, String groupName) throws IOException, PyroclastAPIException {
+        ensureBaseAttributes();
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            String url = String.format("%s/%s/aggregates/%s/group/%s",
+                    this.buildEndpoint(), this.serviceId, aggregateName, groupName);
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.addHeader("Authorization", this.readApiKey);
+            httpGet.addHeader("Content-type", FORMAT);
+
+            ReadAggregateGroupResult result;
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                ResponseParser<ReadAggregateGroupResult> parser = new ReadAggregateGroupParser();
+                result = parser.parseResponse(response, MAPPER);
+            }
+
+            return result;
+        }
     }
 
 }

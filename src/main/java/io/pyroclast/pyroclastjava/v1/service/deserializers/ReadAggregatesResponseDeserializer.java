@@ -85,7 +85,6 @@ public class ReadAggregatesResponseDeserializer extends StdDeserializer<ReadAggr
 
         ServiceAggregates sa = new ServiceAggregates(aggregates);
         return new ReadAggregatesResult(true, sa);
-
     }
 
 }
