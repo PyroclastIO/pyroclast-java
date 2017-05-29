@@ -69,7 +69,7 @@ producer.send(event, onSuccess, onFail, onCancel);
 #### Send a batch of events asynchronously
 
 ```java
-import import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventsResult;
+import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventsResult;
 
 Map<Object, Object> e1 = new HashMap<>();
 e1.put("name", "mike");
