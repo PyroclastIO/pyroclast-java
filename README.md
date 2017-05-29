@@ -15,6 +15,8 @@ Instantiate a client and producer.
 ```java
 import io.pyroclast.pyroclastjava.v1.topic.PyroclastTopicClient;
 import io.pyroclast.pyroclastjava.v1.topic.PyroclastProducer;
+import java.util.List;
+import java.util.Map;
 
 PyroclastTopicClient client = new PyroclastTopicClient()
         .withWriteApiKey("xxxxxxxxxx")
@@ -55,6 +57,7 @@ producer.send(events);
 import io.pyroclast.pyroclastjava.v1.topic.async.AsyncCancelledCallback;
 import io.pyroclast.pyroclastjava.v1.topic.async.AsyncFailCallback;
 import io.pyroclast.pyroclastjava.v1.topic.async.AsyncSuccessCallback;
+import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventResult;
 
 Map<Object, Object> event = new HashMap<>();
 event.put("car", "red");
