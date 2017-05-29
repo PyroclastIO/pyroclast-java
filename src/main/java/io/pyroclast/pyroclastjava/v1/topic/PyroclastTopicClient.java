@@ -110,11 +110,11 @@ public class PyroclastTopicClient {
     public PyroclastProducer createProducer() {
         ensureBaseAttributes();
         ensureWriteApiKey();
-        
+
         return new PyroclastProducer(topicId, writeApiKey, format, buildEndpoint());
     }
 
-    public PyroclastConsumer subscribeToTopic(String subscriptionName) throws IOException, PyroclastAPIException {
+    public PyroclastConsumer createConsumer(String subscriptionName) throws IOException, PyroclastAPIException {
         ensureBaseAttributes();
         ensureReadApiKey();
 

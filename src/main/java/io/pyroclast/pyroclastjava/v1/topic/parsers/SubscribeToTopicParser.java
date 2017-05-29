@@ -4,7 +4,6 @@ import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnauthorizedAccessException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnknownAPIException;
 import io.pyroclast.pyroclastjava.v1.topic.PyroclastConsumer;
-import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventResult;
 import io.pyroclast.pyroclastjava.v1.topic.responses.SubscribeToTopicResult;
 import java.io.IOException;
 import java.io.StringWriter;

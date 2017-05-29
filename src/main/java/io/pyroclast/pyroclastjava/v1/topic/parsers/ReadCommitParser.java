@@ -6,9 +6,6 @@ import io.pyroclast.pyroclastjava.v1.exceptions.UnauthorizedAccessException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnknownAPIException;
 import io.pyroclast.pyroclastjava.v1.topic.responses.ReadCommitResult;
 import java.io.IOException;
-import java.io.StringWriter;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -20,12 +17,7 @@ public class ReadCommitParser implements ResponseParser<ReadCommitResult> {
 
         switch (status) {
             case 200:
-                HttpEntity entity = response.getEntity();
-                StringWriter writer = new StringWriter();
-                IOUtils.copy(entity.getContent(), writer, "UTF-8");
-                String json = writer.toString();
-
-                return mapper.readValue(json, ReadCommitResult.class);
+                return new ReadCommitResult(true);
             case 400:
                 throw new MalformedEventException();
 

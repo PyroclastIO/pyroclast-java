@@ -91,6 +91,49 @@ AsyncCancelledCallback onCancel = status -> System.out.println("Request cancelle
 producer.send(events, onSuccess, onFail, onCancel);
 ```
 
+### Reading events
+
+Instantiate a client.
+
+```java
+import io.pyroclast.pyroclastjava.v1.topic.PyroclastTopicClient;
+import io.pyroclast.pyroclastjava.v1.topic.PyroclastConsumer;
+
+PyroclastTopicClient client = new PyroclastTopicClient()
+        .withReadApiKey("xxxxxxxxxx")
+        .withTopicId("yyyyyyyyyy")
+        .buildClient();
+```
+
+#### Subscribe to a topic
+
+```java
+String subscriptionName = "example-subscription-name";
+PyroclastConsumer consumer = client.createConsumer(subscriptionName);
+```
+
+#### Poll subscribed topic
+
+```java
+import io.pyroclast.pyroclastjava.v1.topic.TopicRecord;
+import java.util.Iterator;
+import java.util.List;
+
+List<TopicRecord> records = consumer.pollTopic().getRecords();
+Iterator<TopicRecord> it = records.iterator();
+
+while (it.hasNext()) {
+    TopicRecord rec = it.next();
+    System.out.println(rec.getValue());
+}
+```
+
+#### Commit read records
+
+```java
+consumer.commit();
+```
+
 ## License
 
 (The MIT License)
