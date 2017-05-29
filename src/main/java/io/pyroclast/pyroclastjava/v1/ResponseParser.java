@@ -1,4 +1,4 @@
-package io.pyroclast.pyroclastjava.v1.topic.parsers;
+package io.pyroclast.pyroclastjava.v1;
 
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
 import java.io.IOException;

@@ -3,7 +3,7 @@ package io.pyroclast.pyroclastjava.v1.topic;
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.PollTopicParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.ReadCommitParser;
-import io.pyroclast.pyroclastjava.v1.topic.parsers.ResponseParser;
+import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.topic.responses.PollTopicResult;
 import io.pyroclast.pyroclastjava.v1.topic.responses.ReadCommitResult;
 import java.io.IOException;

@@ -1,13 +1,13 @@
 package io.pyroclast.pyroclastjava.v1.topic;
 
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
-import io.pyroclast.pyroclastjava.v1.topic.async.AsyncCallback;
-import io.pyroclast.pyroclastjava.v1.topic.async.AsyncCancelledCallback;
-import io.pyroclast.pyroclastjava.v1.topic.async.AsyncFailCallback;
-import io.pyroclast.pyroclastjava.v1.topic.async.AsyncSuccessCallback;
+import io.pyroclast.pyroclastjava.v1.async.AsyncCallback;
+import io.pyroclast.pyroclastjava.v1.async.AsyncCancelledCallback;
+import io.pyroclast.pyroclastjava.v1.async.AsyncFailCallback;
+import io.pyroclast.pyroclastjava.v1.async.AsyncSuccessCallback;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.BulkProduceEventsParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.ProduceEventParser;
-import io.pyroclast.pyroclastjava.v1.topic.parsers.ResponseParser;
+import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventResult;
 import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventsResult;
 import java.io.IOException;

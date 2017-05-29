@@ -1,11 +1,11 @@
-package io.pyroclast.pyroclastjava.v1.topic.parsers;
+package io.pyroclast.pyroclastjava.v1.service.parsers;
 
-import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.exceptions.MalformedEventException;
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnauthorizedAccessException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnknownAPIException;
-import io.pyroclast.pyroclastjava.v1.topic.responses.ProducedEventResult;
+import io.pyroclast.pyroclastjava.v1.ResponseParser;
+import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregatesResult;
 import java.io.IOException;
 import java.io.StringWriter;
 import org.apache.commons.io.IOUtils;
@@ -13,10 +13,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class ProduceEventParser implements ResponseParser<ProducedEventResult> {
+public class ReadAggregatesParser implements ResponseParser<ReadAggregatesResult> {
 
     @Override
-    public ProducedEventResult parseResponse(HttpResponse response, ObjectMapper mapper) throws IOException, PyroclastAPIException {
+    public ReadAggregatesResult parseResponse(HttpResponse response, ObjectMapper mapper) throws IOException, PyroclastAPIException {
         int status = response.getStatusLine().getStatusCode();
 
         switch (status) {
@@ -26,7 +26,7 @@ public class ProduceEventParser implements ResponseParser<ProducedEventResult> {
                 IOUtils.copy(entity.getContent(), writer, "UTF-8");
                 String json = writer.toString();
 
-                return mapper.readValue(json, ProducedEventResult.class);
+                return mapper.readValue(json, ReadAggregatesResult.class);
             case 400:
                 throw new MalformedEventException();
 

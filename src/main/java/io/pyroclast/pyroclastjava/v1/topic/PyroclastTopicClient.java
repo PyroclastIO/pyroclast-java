@@ -1,7 +1,7 @@
 package io.pyroclast.pyroclastjava.v1.topic;
 
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
-import io.pyroclast.pyroclastjava.v1.topic.parsers.ResponseParser;
+import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.topic.parsers.SubscribeToTopicParser;
 import java.io.IOException;
 import org.apache.http.client.methods.CloseableHttpResponse;

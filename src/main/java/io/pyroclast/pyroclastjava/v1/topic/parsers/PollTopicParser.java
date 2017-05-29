@@ -1,5 +1,6 @@
 package io.pyroclast.pyroclastjava.v1.topic.parsers;
 
+import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnauthorizedAccessException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnknownAPIException;

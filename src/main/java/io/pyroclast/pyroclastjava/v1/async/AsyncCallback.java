@@ -1,7 +1,7 @@
-package io.pyroclast.pyroclastjava.v1.topic.async;
+package io.pyroclast.pyroclastjava.v1.async;
 
 import io.pyroclast.pyroclastjava.v1.topic.PyroclastTopicClient;
-import io.pyroclast.pyroclastjava.v1.topic.parsers.ResponseParser;
+import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
