@@ -159,11 +159,19 @@ ServiceAggregates aggregates = client.readAggregates().getAggregates();
 
 #### Get an aggregate by name for a service
 
-Coming soon.
+```java
+import io.pyroclast.pyroclastjava.v1.service.ServiceAggregate;
+
+ServiceAggregate aggregate = client.readAggregate("aggregate-name").getAggregate();
+```
 
 #### Get a single aggregate group by name
 
-Coming soon.
+```java
+import io.pyroclast.pyroclastjava.v1.service.ServiceAggregate;
+
+ServiceAggregate aggregate = client.readAggregateGroup("aggregate-name", "group-name").getAggregate();
+```
 
 ## License
 
