@@ -177,4 +177,4 @@ DeploymentAggregate aggregate = client.readAggregateGroup("aggregate-name", "gro
 
 (The MIT License)
 
-Copyright © 2017 Distibuted Masonry
+Copyright © 2017 Distributed Masonry
