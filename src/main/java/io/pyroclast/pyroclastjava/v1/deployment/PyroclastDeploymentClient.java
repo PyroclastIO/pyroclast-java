@@ -1,13 +1,13 @@
-package io.pyroclast.pyroclastjava.v1.service;
+package io.pyroclast.pyroclastjava.v1.deployment;
 
-import io.pyroclast.pyroclastjava.v1.service.parsers.ReadAggregatesParser;
+import io.pyroclast.pyroclastjava.v1.deployment.parsers.ReadAggregatesParser;
 import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
-import io.pyroclast.pyroclastjava.v1.service.parsers.ReadAggregateGroupParser;
-import io.pyroclast.pyroclastjava.v1.service.parsers.ReadAggregateParser;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateGroupResult;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateResult;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregatesResult;
+import io.pyroclast.pyroclastjava.v1.deployment.parsers.ReadAggregateGroupParser;
+import io.pyroclast.pyroclastjava.v1.deployment.parsers.ReadAggregateParser;
+import io.pyroclast.pyroclastjava.v1.deployment.responses.ReadAggregateGroupResult;
+import io.pyroclast.pyroclastjava.v1.deployment.responses.ReadAggregateResult;
+import io.pyroclast.pyroclastjava.v1.deployment.responses.ReadAggregatesResult;
 import java.io.IOException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -15,14 +15,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class PyroclastServiceClient {
+public class PyroclastDeploymentClient {
 
     private static final String VERSION;
     private static final String DEFAULT_REGION;
     private static final String FORMAT;
     private static final ObjectMapper MAPPER;
 
-    private String serviceId;
+    private String deploymentId;
     private String readApiKey;
     private String endpoint;
     private String region;
@@ -35,33 +35,33 @@ public class PyroclastServiceClient {
         MAPPER = new ObjectMapper();
     }
 
-    public PyroclastServiceClient() {
+    public PyroclastDeploymentClient() {
         this.region = "us-east-1";
         this.validated = false;
     }
 
-    public PyroclastServiceClient withServiceId(String topicId) {
-        this.serviceId = topicId;
+    public PyroclastDeploymentClient withDeploymentId(String topicId) {
+        this.deploymentId = topicId;
         return this;
     }
 
-    public PyroclastServiceClient withReadApiKey(String readApiKey) {
+    public PyroclastDeploymentClient withReadApiKey(String readApiKey) {
         this.readApiKey = readApiKey;
         return this;
     }
 
-    public PyroclastServiceClient withRegion(String region) {
+    public PyroclastDeploymentClient withRegion(String region) {
         this.region = region;
         return this;
     }
 
-    public PyroclastServiceClient withEndpoint(String endpoint) {
+    public PyroclastDeploymentClient withEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;
     }
 
-    public PyroclastServiceClient buildClient() {
-        if (this.serviceId == null) {
+    public PyroclastDeploymentClient buildClient() {
+        if (this.deploymentId == null) {
             throw new IllegalArgumentException("Topic ID must be configured.");
         }
 
@@ -81,11 +81,11 @@ public class PyroclastServiceClient {
 
     private String buildEndpoint() {
         if (this.endpoint != null) {
-            return String.format("%s/%s/services", this.endpoint, VERSION);
+            return String.format("%s/%s/deployments", this.endpoint, VERSION);
         } else if (this.region != null) {
-            return String.format("https://api.%s.pyroclast.io/%s/services", this.region, VERSION);
+            return String.format("https://api.%s.pyroclast.io/%s/deployments", this.region, VERSION);
         } else {
-            return String.format("https://api.%s.pyroclast.io/%s/services", DEFAULT_REGION, VERSION);
+            return String.format("https://api.%s.pyroclast.io/%s/deployments", DEFAULT_REGION, VERSION);
         }
     }
 
@@ -93,7 +93,7 @@ public class PyroclastServiceClient {
         ensureBaseAttributes();
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            String url = String.format("%s/%s", this.buildEndpoint(), this.serviceId);
+            String url = String.format("%s/%s/aggregates", this.buildEndpoint(), this.deploymentId);
             HttpGet httpGet = new HttpGet(url);
             httpGet.addHeader("Authorization", this.readApiKey);
             httpGet.addHeader("Content-type", FORMAT);
@@ -113,7 +113,7 @@ public class PyroclastServiceClient {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = String.format("%s/%s/aggregates/%s",
-                    this.buildEndpoint(), this.serviceId, aggregateName);
+                    this.buildEndpoint(), this.deploymentId, aggregateName);
             HttpGet httpGet = new HttpGet(url);
             httpGet.addHeader("Authorization", this.readApiKey);
             httpGet.addHeader("Content-type", FORMAT);
@@ -133,7 +133,7 @@ public class PyroclastServiceClient {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = String.format("%s/%s/aggregates/%s/group/%s",
-                    this.buildEndpoint(), this.serviceId, aggregateName, groupName);
+                    this.buildEndpoint(), this.deploymentId, aggregateName, groupName);
             HttpGet httpGet = new HttpGet(url);
             httpGet.addHeader("Authorization", this.readApiKey);
             httpGet.addHeader("Content-type", FORMAT);

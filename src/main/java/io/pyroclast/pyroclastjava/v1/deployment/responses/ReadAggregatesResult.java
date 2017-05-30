@@ -1,7 +1,7 @@
-package io.pyroclast.pyroclastjava.v1.service.responses;
+package io.pyroclast.pyroclastjava.v1.deployment.responses;
 
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregates;
-import io.pyroclast.pyroclastjava.v1.service.deserializers.ReadAggregatesResponseDeserializer;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregates;
+import io.pyroclast.pyroclastjava.v1.deployment.deserializers.ReadAggregatesResponseDeserializer;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 @JsonDeserialize(using = ReadAggregatesResponseDeserializer.class)
@@ -9,9 +9,9 @@ public class ReadAggregatesResult {
     
     private final boolean success;
     private final String reason;
-    private final ServiceAggregates aggregates;
+    private final DeploymentAggregates aggregates;
     
-    public ReadAggregatesResult(boolean success, ServiceAggregates aggregates) {
+    public ReadAggregatesResult(boolean success, DeploymentAggregates aggregates) {
         this.success = success;
         this.aggregates = aggregates;
         this.reason = null;
@@ -31,7 +31,7 @@ public class ReadAggregatesResult {
         return this.reason;
     }
     
-    public ServiceAggregates getAggregates() {
+    public DeploymentAggregates getAggregates() {
         return this.aggregates;
     }
 

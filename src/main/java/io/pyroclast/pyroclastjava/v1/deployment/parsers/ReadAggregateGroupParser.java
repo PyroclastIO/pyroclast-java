@@ -1,11 +1,11 @@
-package io.pyroclast.pyroclastjava.v1.service.parsers;
+package io.pyroclast.pyroclastjava.v1.deployment.parsers;
 
 import io.pyroclast.pyroclastjava.v1.ResponseParser;
 import io.pyroclast.pyroclastjava.v1.exceptions.MalformedEventException;
 import io.pyroclast.pyroclastjava.v1.exceptions.PyroclastAPIException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnauthorizedAccessException;
 import io.pyroclast.pyroclastjava.v1.exceptions.UnknownAPIException;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateGroupResult;
+import io.pyroclast.pyroclastjava.v1.deployment.responses.ReadAggregateGroupResult;
 import java.io.IOException;
 import java.io.StringWriter;
 import org.apache.commons.io.IOUtils;

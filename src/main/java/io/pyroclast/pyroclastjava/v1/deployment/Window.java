@@ -1,6 +1,6 @@
-package io.pyroclast.pyroclastjava.v1.service;
+package io.pyroclast.pyroclastjava.v1.deployment;
 
-import io.pyroclast.pyroclastjava.v1.service.deserializers.WindowDeserializer;
+import io.pyroclast.pyroclastjava.v1.deployment.deserializers.WindowDeserializer;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 @JsonDeserialize(using = WindowDeserializer.class)

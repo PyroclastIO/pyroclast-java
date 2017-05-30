@@ -134,43 +134,43 @@ while (it.hasNext()) {
 consumer.commit();
 ```
 
-## Service APIs
+## Deployed Service APIs
 
-### Read service aggregations
+### Read deployed service aggregations
 
 Instantiate a client.
 
 ```java
-import io.pyroclast.pyroclastjava.v1.service.PyroclastServiceClient;
+import io.pyroclast.pyroclastjava.v1.deployment.PyroclastDeploymentClient;
 
-PyroclastServiceClient client = new PyroclastServiceClient()
-        .withServiceId("xxxxxxxxxx")
+PyroclastDeploymentClient client = new PyroclastDeploymentClient()
+        .withDeploymentId("xxxxxxxxxx")
         .withReadApiKey("yyyyyyyyyy")
         .buildClient();
 ```
 
-#### Get all aggregates for a service
+#### Get all aggregates for a deployment
 
 ```java
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregates;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregates;
 
-ServiceAggregates aggregates = client.readAggregates().getAggregates();
+DeploymentAggregates aggregates = client.readAggregates().getAggregates();
 ```
 
-#### Get an aggregate by name for a service
+#### Get an aggregate by name for a deployment
 
 ```java
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregate;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregate;
 
-ServiceAggregate aggregate = client.readAggregate("aggregate-name").getAggregate();
+DeploymentAggregate aggregate = client.readAggregate("aggregate-name").getAggregate();
 ```
 
 #### Get a single aggregate group by name
 
 ```java
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregate;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregate;
 
-ServiceAggregate aggregate = client.readAggregateGroup("aggregate-name", "group-name").getAggregate();
+DeploymentAggregate aggregate = client.readAggregateGroup("aggregate-name", "group-name").getAggregate();
 ```
 
 ## License

@@ -1,8 +1,8 @@
-package io.pyroclast.pyroclastjava.v1.service.deserializers;
+package io.pyroclast.pyroclastjava.v1.deployment.deserializers;
 
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregate;
-import io.pyroclast.pyroclastjava.v1.service.Window;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateResult;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregate;
+import io.pyroclast.pyroclastjava.v1.deployment.Window;
+import io.pyroclast.pyroclastjava.v1.deployment.responses.ReadAggregateResult;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +47,10 @@ public class ReadAggregateResponseDeserializer extends StdDeserializer<ReadAggre
                 parsedWindows.add(window);
             }
 
-            ServiceAggregate sa = new ServiceAggregate(id, type, isGrouped)
+            DeploymentAggregate da = new DeploymentAggregate(id, type, isGrouped)
                     .withName(name)
                     .withUngroupedContents(parsedWindows);
-            return new ReadAggregateResult(true, sa);
+            return new ReadAggregateResult(true, da);
         } else {
             Iterator<Map.Entry<String, JsonNode>> fit = contents.getFields();
             Map<String, List<Window>> parsedWindows = new HashMap<>();
@@ -71,10 +71,10 @@ public class ReadAggregateResponseDeserializer extends StdDeserializer<ReadAggre
                 parsedWindows.put(groupName, windows);
             }
 
-            ServiceAggregate sa = new ServiceAggregate(id, type, isGrouped)
+            DeploymentAggregate da = new DeploymentAggregate(id, type, isGrouped)
                     .withName(name)
                     .withGroupedContents(parsedWindows);
-            return new ReadAggregateResult(true, sa);
+            return new ReadAggregateResult(true, da);
         }
     }
 

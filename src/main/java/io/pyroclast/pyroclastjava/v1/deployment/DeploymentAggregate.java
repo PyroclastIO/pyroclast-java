@@ -1,9 +1,9 @@
-package io.pyroclast.pyroclastjava.v1.service;
+package io.pyroclast.pyroclastjava.v1.deployment;
 
 import java.util.List;
 import java.util.Map;
 
-public class ServiceAggregate {
+public class DeploymentAggregate {
 
     private final String id;
     private final String type;
@@ -12,23 +12,23 @@ public class ServiceAggregate {
     private List<Window> contents;
     private Map<String, List<Window>> groupedContents;
     
-    public ServiceAggregate(String id, String type, boolean isGrouped) {
+    public DeploymentAggregate(String id, String type, boolean isGrouped) {
         this.id = id;
         this.type = type;
         this.isGrouped = isGrouped;
     }
     
-    public ServiceAggregate withName(String name) {
+    public DeploymentAggregate withName(String name) {
         this.name = name;
         return this;
     }
     
-    public ServiceAggregate withUngroupedContents(List<Window> contents) {
+    public DeploymentAggregate withUngroupedContents(List<Window> contents) {
         this.contents = contents;
         return this;
     }
     
-    public ServiceAggregate withGroupedContents(Map<String, List<Window>> contents) {
+    public DeploymentAggregate withGroupedContents(Map<String, List<Window>> contents) {
         this.groupedContents = contents;
         return this;
     }

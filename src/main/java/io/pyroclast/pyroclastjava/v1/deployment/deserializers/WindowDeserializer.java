@@ -1,6 +1,6 @@
-package io.pyroclast.pyroclastjava.v1.service.deserializers;
+package io.pyroclast.pyroclastjava.v1.deployment.deserializers;
 
-import io.pyroclast.pyroclastjava.v1.service.Window;
+import io.pyroclast.pyroclastjava.v1.deployment.Window;
 import java.io.IOException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;

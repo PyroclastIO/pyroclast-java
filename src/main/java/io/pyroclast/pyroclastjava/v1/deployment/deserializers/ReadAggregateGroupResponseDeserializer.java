@@ -1,9 +1,8 @@
-package io.pyroclast.pyroclastjava.v1.service.deserializers;
+package io.pyroclast.pyroclastjava.v1.deployment.deserializers;
 
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregate;
-import io.pyroclast.pyroclastjava.v1.service.Window;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateGroupResult;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregateResult;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregate;
+import io.pyroclast.pyroclastjava.v1.deployment.Window;
+import io.pyroclast.pyroclastjava.v1.deployment.responses.ReadAggregateGroupResult;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,9 +50,9 @@ public class ReadAggregateGroupResponseDeserializer extends StdDeserializer<Read
         Map<String, List<Window>> result = new HashMap<>();
         result.put(group, parsedWindows);
 
-        ServiceAggregate sa = new ServiceAggregate(id, type, isGrouped)
+        DeploymentAggregate da = new DeploymentAggregate(id, type, isGrouped)
                 .withName(name)
                 .withGroupedContents(result);
-        return new ReadAggregateGroupResult(true, sa);
+        return new ReadAggregateGroupResult(true, da);
     }
 }

@@ -1,9 +1,9 @@
-package io.pyroclast.pyroclastjava.v1.service.deserializers;
+package io.pyroclast.pyroclastjava.v1.deployment.deserializers;
 
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregate;
-import io.pyroclast.pyroclastjava.v1.service.ServiceAggregates;
-import io.pyroclast.pyroclastjava.v1.service.Window;
-import io.pyroclast.pyroclastjava.v1.service.responses.ReadAggregatesResult;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregate;
+import io.pyroclast.pyroclastjava.v1.deployment.DeploymentAggregates;
+import io.pyroclast.pyroclastjava.v1.deployment.Window;
+import io.pyroclast.pyroclastjava.v1.deployment.responses.ReadAggregatesResult;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class ReadAggregatesResponseDeserializer extends StdDeserializer<ReadAggr
     public ReadAggregatesResult deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
         ObjectMapper mapper = new ObjectMapper();
-        List<ServiceAggregate> aggregates = new ArrayList<>();
+        List<DeploymentAggregate> aggregates = new ArrayList<>();
         Iterator<Map.Entry<String, JsonNode>> fieldsIterator = node.getFields();
 
         while (fieldsIterator.hasNext()) {
@@ -54,7 +54,7 @@ public class ReadAggregatesResponseDeserializer extends StdDeserializer<ReadAggr
                     parsedWindows.add(window);
                 }
 
-                aggregates.add(new ServiceAggregate(id, type, isGrouped)
+                aggregates.add(new DeploymentAggregate(id, type, isGrouped)
                         .withName(aggregateName)
                         .withUngroupedContents(parsedWindows));
 
@@ -78,13 +78,13 @@ public class ReadAggregatesResponseDeserializer extends StdDeserializer<ReadAggr
                     parsedWindows.put(groupName, windows);
                 }
 
-                aggregates.add(new ServiceAggregate(id, type, isGrouped)
+                aggregates.add(new DeploymentAggregate(id, type, isGrouped)
                         .withGroupedContents(parsedWindows));
             }
         }
 
-        ServiceAggregates sa = new ServiceAggregates(aggregates);
-        return new ReadAggregatesResult(true, sa);
+        DeploymentAggregates da = new DeploymentAggregates(aggregates);
+        return new ReadAggregatesResult(true, da);
     }
 
 }
