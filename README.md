@@ -4,7 +4,21 @@ Java API client for Pyroclast.
 
 ## Installation
 
-Coming soon.
+### Maven
+
+```
+<dependency>
+    <groupId>io.pyroclast</groupId>
+    <artifactId>pyroclast-java</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+
+### Gradle
+
+```gradle
+compile "io.pyroclast:pyroclast-java:1.0.1"
+```
 
 ## Topic APIs
 
