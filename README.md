@@ -6,7 +6,7 @@ Java API client for Pyroclast.
 
 ### Maven
 
-```
+```xml
 <dependency>
     <groupId>io.pyroclast</groupId>
     <artifactId>pyroclast-java</artifactId>
